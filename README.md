@@ -4,7 +4,9 @@
 <br />
 <div align="center">
   <h3 align="center">PyPacket CLI</h3>
-
+    <a href="https://github.com/Karssou/PyPaquets">
+    <img src="docs/image.png" alt="Overview">
+  </a>
   <p align="center">
     A real-time Terminal UI Network Packet Sniffer & Analyzer built with Python, Scapy, and Rich.
     <br />
@@ -36,8 +38,6 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
-[![PyPacket Screen Shot][product-screenshot]](./docs/image.png)
 
 **PyPacket** is a real-time network traffic analyzer running directly inside your terminal. Built as a CS50x Final Project, this command-line tool captures live network packets (both IPv4 and IPv6), applies custom BPF filters via CLI arguments, and renders an interactive Terminal User Interface (TUI) with reverse DNS resolution, real-time statistics, and top host rankings.
 
