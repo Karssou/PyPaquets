@@ -78,6 +78,6 @@ Follow these instructions to set up and run PyPacket locally.
 
 1. Clone the repository:
    ```sh
-   git clone [https://github.com/your_username/pypacket-cli.git](https://github.com/your_username/pypacket-cli.git)
-   cd pypacket-cli
+   git clone https://github.com/Karssou/PyPaquets.git
+   cd PyPaquets
    ```
