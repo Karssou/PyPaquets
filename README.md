@@ -36,11 +36,9 @@ Key Features:
 
 This project relies on core Python networking and TUI libraries:
 
-- [![Python][Python-badge]][Python-url]
-- [![Scapy][Scapy-badge]][Scapy-url]
-- [![Rich][Rich-badge]][Rich-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- Python
+- Rich
+- Scappy
 
 <!-- GETTING STARTED -->
 
