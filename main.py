@@ -99,7 +99,7 @@ def analyse_paquet(paquet):
         raw_dst = paquet[IPv6].dst
 
     if raw_src or raw_dst:
-        # Résolution du nom de domaine/hôte
+        # Resolve Domain name
         ip_src = resolve_ip(raw_src)
         ip_dst = resolve_ip(raw_dst)
 
@@ -155,7 +155,7 @@ def generateCLI(en_pause=False, filtre_actif="Aucun") -> Layout:
     layout["header"].update(Panel(texte_stats, title=titre_panel))
 
     # Traffic logs
-    tableau_journal = Table(expand=True, title="Traffic log(15 derniers paquets)")
+    tableau_journal = Table(expand=True, title="Traffic logs(15 derniers paquets)")
     tableau_journal.add_column("Protocol", justify="center", style="bold")
     tableau_journal.add_column("Source IP", justify="center")
     tableau_journal.add_column("Destination IP", justify="center")
