@@ -1,6 +1,7 @@
 <a id="readme-top"></a>
 
 <!-- PROJECT LOGO / SCREENSHOT -->
+
 <br />
 <div align="center">
   <h3 align="center">PyPacket CLI</h3>
@@ -13,11 +14,9 @@
     <a href="https://github.com/Karssou/PyPackets"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-   
-  </p>
-</div>
 
 <!-- TABLE OF CONTENTS -->
+
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -31,8 +30,8 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-  
-  </ol>
+
+</ol>
 </details>
 
 <!-- ABOUT THE PROJECT -->
@@ -80,4 +79,13 @@ Follow these instructions to set up and run PyPacket locally.
    ```sh
    git clone https://github.com/Karssou/PyPaquets.git
    cd PyPaquets
+   ```
+2. Create the python virtual environment & install al dependencies
+   ```sh
+   python -m venv ./.venv
+   pip install -r requirements.txt
+   ```
+3. Launch the app
+   ```sh
+   python main.py [arguments]
    ```
