@@ -14,6 +14,7 @@
     <a href="https://github.com/Karssou/PyPackets"><strong>Explore the docs »</strong></a>
     <br />
     <br />
+</div>
 
 <!-- ABOUT THE PROJECT -->
 
