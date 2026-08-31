@@ -9,8 +9,10 @@ from rich.live import Live
 from rich.panel import Panel
 from rich.table import Table
 from scapy.layers.inet import ICMP, IP, TCP, UDP
+from scapy.layers.dns import DNS, DNSQR
 from scapy.layers.inet6 import IPv6
 from scapy.sendrecv import AsyncSniffer
+from scapy.layers.tls.handshake import TLSClientHello
 
 from ip import is_my_ip, resolve_ip
 
@@ -62,14 +64,50 @@ def build_filter_bpf(args):
     return bpf_filter
 
 
-stats = {"total": 0, "tcp": 0, "udp": 0, "icmp": 0, "autres": 0}
+stats = {"total": 0, "tcp": 0, "udp": 0, "icmp": 0, "dns": 0, "autres": 0}
 derniers_paquets = deque(maxlen=15)
 ip_counter = Counter()
+
+
+def get_dns_query(packet):
+    if not packet.haslayer(DNS):
+        return None
+
+    dns = packet[DNS]
+
+    if not dns.qr:  # 0 = query
+        if dns.qd and isinstance(dns.qd, DNSQR):
+            return dns.qd.qname.decode(errors="ignore").rstrip(".")
+
+    return None
+
+
+def get_tls_sni(packet) -> str | None:
+
+    if packet.haslayer(TLSClientHello):
+        try:
+            client_hello = packet[TLSClientHello]
+            if hasattr(client_hello, "extensions") and client_hello.extensions:
+                for ext in client_hello.extensions:
+                    if hasattr(ext, "server_names") and ext.server_names:
+                        for server_name in ext.server_names:
+                            # Décodage du nom de domaine
+                            return server_name.data.decode("utf-8", errors="ignore")
+        except Exception:
+            return None
+    return None
 
 
 def analyse_paquet(paquet):
     """Analyse a paquet to retrieve its IP address & resolve it"""
     stats["total"] += 1
+
+    domain = get_tls_sni(paquet)
+
+    if domain:
+        protocole = "HTTPS"
+        couleur = "bright_green"
+        stats["tcp"] += 1
 
     protocole = "OTHER"
     couleur = "white"
@@ -78,10 +116,23 @@ def analyse_paquet(paquet):
         protocole = "TCP"
         couleur = "green"
         stats["tcp"] += 1
+    elif paquet.haslayer(DNS):
+        query_name = get_dns_query(paquet)
+        if query_name:
+            protocole = (
+                f"DNS ({query_name[:15]}...)"
+                if len(query_name) > 18
+                else f"DNS ({query_name})"
+            )
+        else:
+            protocole = "DNS"
+        couleur = "bright_yellow"  # Rich utilise 'bright_yellow' ou une couleur hexa
+        stats["dns"] += 1
     elif paquet.haslayer(UDP):
         protocole = "UDP"
         couleur = "cyan"
         stats["udp"] += 1
+
     elif paquet.haslayer(ICMP):
         protocole = "ICMP"
         couleur = "yellow"

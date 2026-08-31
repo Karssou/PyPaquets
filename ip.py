@@ -1,5 +1,25 @@
+import ipaddress
 import socket
 from functools import lru_cache
+
+
+
+
+def is_special_ip(ip: str) -> bool:
+    """Allow me to get a better approach in verifying special IPs"""
+    try:
+        addr = ipaddress.ip_address(ip)
+
+        return (
+            addr.is_loopback
+            or addr.is_private
+            or addr.is_link_local
+            or addr.is_multicast
+            or addr.is_unspecified
+        )
+
+    except ValueError:
+        return True
 
 
 def get_local_ipv4() -> str:
@@ -18,7 +38,7 @@ def get_local_ipv6() -> str:
     """Récupère l'adresse IPv6 locale principale."""
     try:
         s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        # Connexion fictive vers un serveur DNS IPv6 public
+        # False connection
         s.connect(("2001:4860:4860::8888", 80))
         local_ipv6 = s.getsockname()[0]
         s.close()
@@ -34,11 +54,10 @@ def resolve_ip(ip: str) -> str:
     Le cache @lru_cache évite d'interroger le réseau pour des IP déjà vues.
     """
     # Bypass the special IPs
-    if ip.startswith(("127.", "192.168.", "10.", "Inconnu")):
+    if is_special_ip(ip):
         return ip
 
     try:
-        socket.setdefaulttimeout(0.5)
         nom_hote = socket.gethostbyaddr(ip)[0]
 
         # Shorten the domain name
